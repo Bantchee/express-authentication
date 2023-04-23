@@ -36,7 +36,7 @@ app.use(express.urlencoded({ extended: false }));
 passport.use(
     new LocalStrategy(async (username, password, done) => {
         try {
-            const user = await user.findOne( { username: username });
+            const user = await User.findOne( { username: username });
             if (!user) {
                 return done(null, false,  {message: "Incorrect username" });
             }
@@ -63,7 +63,7 @@ passport.deserializeUser(async function(id, done) {
     };
 });
 
-app.get("/", (req, res) => res.render("index"));
+app.get("/", (req, res) => res.render("index", {user: req.user }));
 app.get("/sign-up", (req, res) => res.render("sign-up-form"));
 app.post("/sign-up", async (req, res, next) => {
     try {
@@ -76,7 +76,15 @@ app.post("/sign-up", async (req, res, next) => {
     } catch(err) {
         return next(err);
     };
-  });
+  }
+);
+app.post(
+    "/log-in",
+    passport.authenticate("local", {
+        successRedirect: "/",
+        failureRedirect: "/"
+    })
+);
   
 
 app.listen(3000, () => console.log("app listening on port 3000!"));

@@ -7,7 +7,19 @@
     <title>Express Authentication</title>
 </head>
 <body>
-    <h1>Hello Bitch!</h1>
-    <a href="./sign-up">sign-up</a>
+    <% if (user) {%>
+        <h1>WELCOME BACK <%= user.username %></h1>
+        <a href="/log-out">LOG OUT</a>
+      <% } else { %>
+        <a href="./sign-up">sign-up</a>
+        <h1>please log in</h1>
+        <form action="/log-in" method="POST">
+        <label for="username">Username</label>
+        <input name="username" placeholder="username" type="text" />
+        <label for="password">Password</label>
+        <input name="password" type="password" />
+        <button>Log In</button>
+        </form>
+    <%}%>
 </body>
 </html>
